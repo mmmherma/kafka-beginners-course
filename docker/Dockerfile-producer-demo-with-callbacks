@@ -1,0 +1,5 @@
+FROM openjdk:8-jre
+
+ADD target/kafka-beginners-course-1.0-SNAPSHOT-jar-with-dependencies.jar /opt/kafka-beginners-course-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+CMD ["java", "-cp", "/opt/kafka-beginners-course-1.0-SNAPSHOT-jar-with-dependencies.jar", "com.github.simplekafka.kafka.tutorial1.ProducerDemoWithCallbacks"]
