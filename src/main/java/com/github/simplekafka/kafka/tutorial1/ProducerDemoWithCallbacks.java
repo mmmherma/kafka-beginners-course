@@ -25,24 +25,27 @@ public class ProducerDemoWithCallbacks {
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);
 
         // STEP 3. Send data
-        // Create a ProducerRecord
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>("first_topic", "hello world!");
-        // Send data -- This is asynchronous
-        producer.send(record, new Callback() {
-            public void onCompletion(RecordMetadata recordMetadata, Exception e) {
-                // Executes when record is successfylly sent or an exception is thrown
-                if(e == null) {
-                    // Record successfully sent
-                    logger.info("Received new metadata:");
-                    logger.info("Topic: " + recordMetadata.topic());
-                    logger.info("Partition: " + recordMetadata.partition());
-                    logger.info("Offset: " + recordMetadata.offset());
-                    logger.info("Timestamp: " + recordMetadata.timestamp());
-                } else {
-                    logger.error("Error produced: " + e);
+        for (int i = 0; i < 10; i++) {
+            // Create a ProducerRecord
+            ProducerRecord<String, String> record = new ProducerRecord<String, String>("first_topic", "hello world!" + Integer.toString(i));
+            // Send data -- This is asynchronous
+            producer.send(record, new Callback() {
+                public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+                    // Executes when record is successfylly sent or an exception is thrown
+                    if(e == null) {
+                        // Record successfully sent
+                        logger.info("Received new metadata:");
+                        logger.info("Topic: " + recordMetadata.topic());
+                        logger.info("Partition: " + recordMetadata.partition());
+                        logger.info("Offset: " + recordMetadata.offset());
+                        logger.info("Timestamp: " + recordMetadata.timestamp());
+                    } else {
+                        logger.error("Error produced: " + e);
+                    }
                 }
-            }
-        });
+            });
+        }
+
         // Flush messages to send them
         producer.flush();
         // Close producer
