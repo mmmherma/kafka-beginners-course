@@ -16,3 +16,4 @@ docker build --no-cache -f docker/Dockerfile-producer-demo -t producer-demo:v1 .
 docker build --no-cache -f docker/Dockerfile-producer-demo-with-callbacks -t producer-demo-with-callbacks:v1 .
 docker build --no-cache -f docker/Dockerfile-producer-demo-keys -t producer-demo-keys:v1 .
 docker build --no-cache -f docker/Dockerfile-consumer-demo -t consumer-demo:v1 .
+docker build --no-cache -f docker/Dockerfile-consumer-demo-groups -t consumer-demo-groups:v1 .
