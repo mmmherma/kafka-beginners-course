@@ -20,3 +20,4 @@ docker build --no-cache -f docker/Dockerfile-consumer-demo-groups -t consumer-de
 docker build --no-cache -f docker/Dockerfile-consumer-demo-with-threads -t consumer-demo-with-threads:v1 .
 docker build --no-cache -f docker/Dockerfile-consumer-demo-assign-seek -t consumer-demo-assign-seek:v1 .
 docker build --no-cache -f docker/Dockerfile-twitter-producer -t twitter-producer:v1 .
+docker build --no-cache -f docker/Dockerfile-producer-demo-safe -t producer-demo-safe:v1 .
