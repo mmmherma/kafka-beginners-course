@@ -1,2 +1,4 @@
-target/
+kafka-basics/target/
+kafka-producer-twitter/target
+
 .idea/

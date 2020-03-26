@@ -80,10 +80,10 @@ public class TwitterProducerHighThroughput {
         }
     }
 
-    String consumerKey = "XnWOrxDKCsSJLstOyIfbISx7c";
-    String consumerSecret = "gKy9hCF6fC6DRai4gOulgdn6oB0HXbIOYkQT50X0ECaicqJ0Qn";
-    String token = "2508054720-tHXxy9CNxWjjhfiqkyhkz4xuIBSB5jx0DW0xgeF";
-    String secret = "Iz95JSFe92I6q19UePQZvfUAVMTdivHL9FykS38xwzlQr";
+    String consumerKey = "";
+    String consumerSecret = "";
+    String token = "";
+    String secret = "";
 
     public Client createTwitterClient(BlockingQueue<String> msgQueue) {
         /** Declare the host you want to connect to, the endpoint, and authentication (basic auth or oauth) */
