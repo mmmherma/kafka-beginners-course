@@ -1,5 +1,6 @@
 package com.github.kafka.tutorial3;
 
+import com.google.gson.JsonParser;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -44,13 +45,20 @@ public class ElasticSearchConsumer {
                     // Insert data into ElasticSearch
                     String jsonString = record.value();
 
+                    // 2 strategies to make idempotent consumer
+                    //   * Kafka generic ID
+                    //String id = record.topic() + "_" + record.partition() + "_" + record.offset();
+                    //   * Twitter feed specific ID
+                    String id = extractIdFromTweet(record.value());
+
                     IndexRequest indexRequest = new IndexRequest(
                             "twitter",
-                            "tweets"
+                            "tweets",
+                            id // To make our consumer idempotent
                     ).source(jsonString, XContentType.JSON);
 
                     IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
-                    String id = indexResponse.getId();
+                    logger.info(indexResponse.getId());
                     logger.info(id);
                     try {
                         Thread.sleep(1000);
@@ -65,6 +73,13 @@ public class ElasticSearchConsumer {
         }
 
         //client.close();
+    }
+
+    private static JsonParser jsonParser = new JsonParser();
+    private static String extractIdFromTweet(String  tweetJson) {
+        return jsonParser.parse(tweetJson).getAsJsonObject()
+                .get("id_str")
+                .getAsString();
     }
 
     public static KafkaConsumer<String, String> createConsumer(String topic) {
@@ -92,9 +107,9 @@ public class ElasticSearchConsumer {
 
     public static RestHighLevelClient createClient() {
         // Replace with your own credentials
-        String hostname = "kafka-testing-7931713306.eu-west-1.bonsaisearch.net";
-        String username = "7fcomgy782";
-        String password = "j7366s6rze";
+        String hostname = "";
+        String username = "";
+        String password = "";
 
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
