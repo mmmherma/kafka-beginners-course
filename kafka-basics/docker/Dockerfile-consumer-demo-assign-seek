@@ -1,0 +1,5 @@
+FROM openjdk:8-jre
+
+ADD target/kafka-basics-1.0-SNAPSHOT-jar-with-dependencies.jar /opt/kafka-basics-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+CMD ["java", "-cp", "/opt/kafka-basics-1.0-SNAPSHOT-jar-with-dependencies.jar", "kafka.tutorial1.ConsumerDemoAssignSeek"]
