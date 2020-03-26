@@ -24,3 +24,5 @@ docker build --no-cache -f docker/Dockerfile-producer-demo-safe -t producer-demo
 cd ../kafka-producer-twitter
 docker build --no-cache -f docker/Dockerfile-twitter-producer -t twitter-producer:v1 .
 docker build --no-cache -f docker/Dockerfile-twitter-producer-high-throughput -t twitter-producer-high-throughput:v1 .
+cd ../kafka-consumer-elasticsearch
+docker build --no-cache -f docker/Dockerfile-elasticsearch-consumer -t elasticsearch-consumer:v1 .

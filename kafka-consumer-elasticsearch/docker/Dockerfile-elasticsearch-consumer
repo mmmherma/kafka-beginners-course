@@ -1,0 +1,5 @@
+FROM openjdk:8-jre
+
+ADD target/kafka-consumer-elasticsearch-1.0-SNAPSHOT-jar-with-dependencies.jar /opt/kafka-consumer-elasticsearch-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+CMD ["java", "-cp", "/opt/kafka-consumer-elasticsearch-1.0-SNAPSHOT-jar-with-dependencies.jar", "com.github.kafka.tutorial3.ElasticSearchConsumer"]
