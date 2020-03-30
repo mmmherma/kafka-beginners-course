@@ -107,7 +107,7 @@ public class ElasticSearchConsumer {
 
     public static RestHighLevelClient createClient() {
         // Replace with your own credentials
-        String hostname = "";
+        String hostname = "elasticsearch";
         String username = "";
         String password = "";
 

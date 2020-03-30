@@ -15,6 +15,8 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
@@ -81,10 +83,25 @@ public class TwitterProducer {
         }
     }
 
-    String consumerKey = "";
-    String consumerSecret = "";
-    String token = "";
-    String secret = "";
+    public String getConfigParamenter(String key) {
+        Properties configProperties = new Properties();
+        try {
+            String propertiesFile = "config.properties";
+
+            InputStream configStream = getClass().getClassLoader().getResourceAsStream(propertiesFile);
+
+            if(configStream != null) {
+                configProperties.load(configStream);
+            } else {
+                configStream.close();
+                throw new FileNotFoundException("Property file: " + propertiesFile + " not found");
+            }
+        } catch(Exception e) {
+            logger.error(String.valueOf(e));
+        }
+
+        return configProperties.getProperty(key);
+    }
 
     public Client createTwitterClient(BlockingQueue<String> msgQueue) {
         /** Declare the host you want to connect to, the endpoint, and authentication (basic auth or oauth) */
@@ -94,7 +111,12 @@ public class TwitterProducer {
         hosebirdEndpoint.trackTerms(terms);
 
         // These secrets should be read from a config file
-        Authentication hosebirdAuth = new OAuth1(consumerKey, consumerSecret, token, secret);
+        Authentication hosebirdAuth = new OAuth1(
+                getConfigParamenter("apiKey"),
+                getConfigParamenter("apiSecret"),
+                getConfigParamenter("token"),
+                getConfigParamenter("tokenSecret")
+        );
 
         ClientBuilder builder = new ClientBuilder()
                 .name("Hosebird-Client-01")                              // optional: mainly for the logs
