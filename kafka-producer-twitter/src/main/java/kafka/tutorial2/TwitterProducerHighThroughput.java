@@ -15,6 +15,8 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
@@ -80,10 +82,25 @@ public class TwitterProducerHighThroughput {
         }
     }
 
-    String consumerKey = "XnWOrxDKCsSJLstOyIfbISx7c";
-    String consumerSecret = "gKy9hCF6fC6DRai4gOulgdn6oB0HXbIOYkQT50X0ECaicqJ0Qn";
-    String token = "2508054720-ewxNPN5PxJUwDZEveSGDBK5xHuy2CFZJz69b4HW";
-    String secret = "0lDlKWhmnPhw5zIUtQG8X1jcgYqqR2NcGPyPM0dhvQP3p";
+    public String getConfigParamenter(String key) {
+        Properties configProperties = new Properties();
+        try {
+            String propertiesFile = "config.properties";
+
+            InputStream configStream = getClass().getClassLoader().getResourceAsStream(propertiesFile);
+
+            if(configStream != null) {
+                configProperties.load(configStream);
+            } else {
+                configStream.close();
+                throw new FileNotFoundException("Property file: " + propertiesFile + " not found");
+            }
+        } catch(Exception e) {
+            logger.error(String.valueOf(e));
+        }
+
+        return configProperties.getProperty(key);
+    }
 
     public Client createTwitterClient(BlockingQueue<String> msgQueue) {
         /** Declare the host you want to connect to, the endpoint, and authentication (basic auth or oauth) */
@@ -93,7 +110,12 @@ public class TwitterProducerHighThroughput {
         hosebirdEndpoint.trackTerms(terms);
 
         // These secrets should be read from a config file
-        Authentication hosebirdAuth = new OAuth1(consumerKey, consumerSecret, token, secret);
+        Authentication hosebirdAuth = new OAuth1(
+                getConfigParamenter("apiKey"),
+                getConfigParamenter("apiSecret"),
+                getConfigParamenter("token"),
+                getConfigParamenter("tokenSecret")
+        );
 
         ClientBuilder builder = new ClientBuilder()
                 .name("Hosebird-Client-01")                              // optional: mainly for the logs
